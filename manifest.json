@@ -1,0 +1,19 @@
+{
+    "short_name": "golfnotgolf",
+    "name": "Golf not Golf",
+    "icons": [
+      {
+        "src": "512x512icon.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "512x512icon.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+    ],
+    "background_color": "#3367D6",
+    "display": "fullscreen",
+    "theme_color": "#3367D6"
+  }
