@@ -13,3 +13,15 @@ self.addEventListener('install', function(event) {
       })
   );
 });
+
+self.addEventListener("fetch", function(e) {
+	e.respondWith(
+		caches.match(e.request)
+		.then(function(response) {
+			if (response) {
+				return response;
+			}
+			return fetch(e.request);
+		});
+	);
+});
