@@ -1,6 +1,7 @@
 var CACHE_NAME = 'golfnotgolf-cache-v1';
 var urlsToCache = [
-  '/index.html'
+  "index.html",
+	"512x512icon.png"
 ];
 
 self.addEventListener('install', function(event) {
@@ -20,6 +21,7 @@ self.addEventListener('fetch', function(event) {
       .then(function(response) {
         // Cache hit - return response
         if (response) {
+	  console.log("cache it!");
           return response;
         }
         return fetch(event.request);
