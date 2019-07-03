@@ -9,15 +9,23 @@ and the regex stuff is not working
 
 import re
 
-SCRIPT_PAT = re.compile("<script type=\"text/javascript\">(.*?)</script>", re.DOTALL)
+"""
+re explanation: (?: is a non capturing group '|\" will match single or double quotes
+DOTALL to get newlines
+"""
+SCRIPT_PAT = re.compile("<script type=(?:'|\")text/javascript(?:'|\")>(.*?)</script>", re.DOTALL)
 
-inf = open("index.html","r")
+inf = open("golf.lua.html","r")
 data = inf.read()
 inf.close()
 
-print("len of data",len(data))
+"""
+exported carts APPEAR to have two js sections that we want to replace
+the first one has double quotes in the type tag and the second
+(THE CART) has single quotes for the type tag
+"""
+
 res = SCRIPT_PAT.findall(data)
-print(len(res))
-print("len of res[0]", len(res[0]))
-print(res[0][0:80])
+print("len of res",len(res))
+print(res[0])
 
