@@ -8,6 +8,7 @@ local x = 120
 local y = 68
 local a = 0
 local pi2 = 3.14159 * 2
+local tailColor = 0
 
 
 TURN_RADIUS = 0.05    -- how much the car turn when pressing left or right
@@ -45,6 +46,15 @@ function drawCar(c)
 	line(c.x, c.y, c.x+x1, c.y+y1, 15)
 end
 
+function drawCarPlus(c)
+	local x1,y1 = vector(8,c.a-pi2)
+	line(c.x, c.y, c.x-x1, c.y-y1,tailColor)
+	tailColor=tailColor+1
+	if tailColor>16 then
+		tailColor=0
+	end
+end
+
 function rotate(x,y,a)
 	return x * math.cos(a)-y*math.sin(a),
 		x*math.sin(a) + y*math.cos(a)
@@ -73,9 +83,16 @@ end
 drawCar(car)
 
 if btn(4) then
+	drawCarPlus(car)
 	local ax,ay = vector(ACCEL_VALUE,car.a)
 	car.vx=car.vx+ax -- change velocity this time
 	car.vy=car.vy+ay
+   end
+
+   -- this push the car towards the ground
+   car.vy=car.vy+0.008
+   if car.vy>1 then
+		car.vy=1
    end
 
    -- add velocity to car
