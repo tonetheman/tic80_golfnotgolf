@@ -20,7 +20,6 @@ car = {
  a=0 -- angle
 }
 
-
 -- adds two angles ensuring the
 -- result is in the 0..2pi range
 function angleAdd(a, d)
@@ -60,43 +59,92 @@ function rotate(x,y,a)
 		x*math.sin(a) + y*math.cos(a)
 end
 
+--[[
+	GAME STUFF STARTS HERE
+]]
+local game = nil
+local intro = nil
+local currentScene = nil
+
+local IntroScene = {}
+function IntroScene.new()
+	local self = {}
+	function self:update()
+		if btn(4) then
+			-- switch to game scene
+			currentScene = game
+		end
+	end
+	function self:draw()
+		cls(0)
+		print("golf not golf. press (z)")
+	end
+	return self
+end
+
+local GameScene = {}
+function GameScene.new()
+	local self = {}
+	function self:update()
+		self.drawCarPlus = false
+
+		-- rotate our direction
+		if btn(2) then car.a=angleAdd(car.a,-0.05) end
+		if btn(3) then car.a=angleAdd(car.a,0.05) end
+		if car.y<-1 then
+			car.y = 136-car.y
+		end
+		if car.y>139 then
+			car.y = car.y-136
+		end
+		if car.x>241 then
+			car.x = 1
+		end
+		if car.x<0 then
+			car.x = 240+car.x
+		end
+
+		if btn(4) then
+			self.drawCarPlus = true
+			local ax,ay = vector(ACCEL_VALUE,car.a)
+			car.vx=car.vx+ax -- change velocity this time
+			car.vy=car.vy+ay
+		end
+		
+		   -- this push the car towards the ground
+		   car.vy=car.vy+0.008
+		   if car.vy>1 then
+				car.vy=1
+		   end
+		
+		   -- add velocity to car
+		   car.x=car.x+car.vx
+		   car.y=car.y+car.vy
+	end
+
+	function self:draw()
+		cls(0)
+		drawCar(car)
+		if self.drawCarPlus then
+			drawCarPlus(car)
+		end
+	end
+	
+	return self
+end
+
+function _init()
+	-- create scenes
+	intro = IntroScene.new()
+	game = GameScene.new()
+
+	-- setup current scene
+	currentScene = intro
+end
+
+_init()
+
 function TIC()
--- rotate our direction
-if btn(2) then car.a=angleAdd(car.a,-0.05) end
-if btn(3) then car.a=angleAdd(car.a,0.05) end
- 
-cls(0)
-
-if car.y<-1 then
-	car.y = 136-car.y
-end
-if car.y>139 then
-	car.y = car.y-136
-end
-if car.x>241 then
-	car.x = 1
-end
-if car.x<0 then
-	car.x = 240+car.x
-end
-
-drawCar(car)
-
-if btn(4) then
-	drawCarPlus(car)
-	local ax,ay = vector(ACCEL_VALUE,car.a)
-	car.vx=car.vx+ax -- change velocity this time
-	car.vy=car.vy+ay
-   end
-
-   -- this push the car towards the ground
-   car.vy=car.vy+0.008
-   if car.vy>1 then
-		car.vy=1
-   end
-
-   -- add velocity to car
-   car.x=car.x+car.vx
-   car.y=car.y+car.vy
-
+	currentScene:update()
+	currentScene:draw()
 end
