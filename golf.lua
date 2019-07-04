@@ -42,7 +42,7 @@ function vector(length, angle)
 
 function drawCar(c)
 	circb(c.x, c.y, 3, 15)
-	local x1,y1 = vector(10,c.a)
+	local x1,y1 = vector(5,c.a)
 	line(c.x, c.y, c.x+x1, c.y+y1, 15)
 end
 
